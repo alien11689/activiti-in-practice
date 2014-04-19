@@ -5,7 +5,6 @@ import org.activiti.engine.RuntimeService
 import org.activiti.engine.TaskService
 import org.activiti.engine.history.HistoricProcessInstance
 import org.activiti.engine.runtime.ProcessInstance
-import org.activiti.engine.task.Task
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import spock.lang.Specification
@@ -23,11 +22,8 @@ class TheSimplestProcessTest extends Specification {
     HistoryService historyService
 
     def "should finished simplest process"() {
-        given:
-            ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("simplest-process")
-            Task task = taskService.createTaskQuery().singleResult()
         when:
-            taskService.complete(task.getId())
+            ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("simplest-process")
         then:
             HistoricProcessInstance result = historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstance.processInstanceId).singleResult()
             result.endTime != null

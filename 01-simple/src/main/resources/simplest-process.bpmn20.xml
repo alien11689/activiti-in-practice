@@ -9,9 +9,7 @@
     <process id="simplest-process">
 
         <startEvent id="start" />
-        <sequenceFlow id="flow1" sourceRef="start" targetRef="performAction" />
-        <userTask id="performAction" />
-        <sequenceFlow sourceRef="performAction" targetRef="end"/>
+        <sequenceFlow id="flow1" sourceRef="start" targetRef="end"/>
         <endEvent id="end" />
 
     </process>
