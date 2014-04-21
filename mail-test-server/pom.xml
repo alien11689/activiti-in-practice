@@ -11,11 +11,6 @@
 
     <artifactId>mail-test-server</artifactId>
 
-    <properties>
-        <smtp.folder>${basedir}/target/mail</smtp.folder>
-        <smtp.port>2525</smtp.port>
-    </properties>
-
     <build>
         <plugins>
             <plugin>
