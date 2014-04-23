@@ -11,11 +11,10 @@ import org.activiti.engine.runtime.ProcessInstance
 import org.activiti.engine.task.Task
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
-import spock.lang.Shared
 import spock.lang.Specification
 
 @ContextConfiguration(locations = "/context.xml")
-class ProcessWithUserTaskTest extends Specification{
+class ProcessWithUserTaskTest extends Specification {
 
     @Autowired
     RuntimeService runtimeService
@@ -29,7 +28,7 @@ class ProcessWithUserTaskTest extends Specification{
     @Autowired
     IdentityService identityService
 
-    def setup(){
+    def setup() {
         User user = identityService.newUser("salesman")
         identityService.saveUser(user)
         Group group = identityService.newGroup("worker")
@@ -77,13 +76,13 @@ class ProcessWithUserTaskTest extends Specification{
         when:
             taskService.complete(task.id)
         then:
-            [] == runtimeService.createProcessInstanceQuery()
+            null == runtimeService.createProcessInstanceQuery()
                     .processInstanceId(processInstance.processInstanceId)
                     .singleResult()
     }
 
-    def cleanup(){
-        identityService.deleteMembership("salesman","worker")
+    def cleanup() {
+        identityService.deleteMembership("salesman", "worker")
         identityService.deleteGroup("worker")
         identityService.deleteUser("salesman")
     }
