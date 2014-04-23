@@ -9,7 +9,7 @@ import org.springframework.test.context.ContextConfiguration
 import spock.lang.Specification
 import spock.lang.Unroll
 
-@ContextConfiguration(locations = "/test-context.xml")
+@ContextConfiguration(locations = "/context.xml")
 class ProcessWithManualTaskTest extends Specification {
 
     @Autowired
@@ -23,7 +23,9 @@ class ProcessWithManualTaskTest extends Specification {
         when:
             ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("process-with-manual-task")
         then:
-            HistoricProcessInstance result = historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstance.processInstanceId).singleResult()
+            HistoricProcessInstance result = historyService.createHistoricProcessInstanceQuery()
+                    .processInstanceId(processInstance.processInstanceId)
+                    .singleResult()
             result.endTime != null
     }
 }
