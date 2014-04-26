@@ -1,9 +1,11 @@
 package com.blogspot.przybyszd.activitiinpractice.variablesandconditions
 
 import org.activiti.engine.FormService
+import org.activiti.engine.RepositoryService
 import org.activiti.engine.RuntimeService
 import org.activiti.engine.TaskService
 import org.activiti.engine.form.StartFormData
+import org.activiti.engine.repository.ProcessDefinition
 import org.activiti.engine.task.Task
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
@@ -24,10 +26,17 @@ class VariablesAndConditionsTest extends Specification {
     @Autowired
     TaskService taskService
 
+    @Autowired
+    RepositoryService repositoryService
+
     @Unroll
     def "should get form properties for process"() {
+        given:
+            ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
+                    .processDefinitionKey(PROCESS_DEFINITION)
+                    .singleResult()
         when:
-            StartFormData startFormData = formService.getStartFormData(PROCESS_DEFINITION)
+            StartFormData startFormData = formService.getStartFormData(processDefinition.id)
         then:
             startFormData.formProperties.size() == 1
             startFormData.formProperties.get(0).id == "hardwareProblem"
@@ -37,16 +46,20 @@ class VariablesAndConditionsTest extends Specification {
 
     @Unroll
     def "should only fix hardware problem"() {
+        given:
+            ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
+                    .processDefinitionKey(PROCESS_DEFINITION)
+                    .singleResult()
         when:
-            String processInstanceId = formService.submitStartFormData(PROCESS_DEFINITION, ["hardwareProblem": "true"])
+            String processInstanceId = formService.submitStartFormData(processDefinition.id, ["hardwareProblem": "true"])
         then:
-            Task task = taskService.createTaskQuery()
+            List<Task> tasks = taskService.createTaskQuery()
                     .processInstanceId(processInstanceId)
                     .active()
                     .list()
-            task.name == "fixHardwareProblem"
+            tasks.get(0).name == "fixHardwareProblem"
         when:
-            taskService.complete(task.id)
+            taskService.complete(tasks.get(0).id)
         then:
             runtimeService.createProcessInstanceQuery().list() == []
     }
@@ -56,13 +69,13 @@ class VariablesAndConditionsTest extends Specification {
         when:
             String processInstanceId = runtimeService.startProcessInstanceByKey(PROCESS_DEFINITION, ["hardwareProblem": false])
         then:
-            Task task = taskService.createTaskQuery()
+            List<Task> tasks = taskService.createTaskQuery()
                     .processInstanceId(processInstanceId)
                     .active()
                     .list()
-            task.name == "fixSoftwareProblem"
+            tasks.get(0).name == "fixSoftwareProblem"
         when:
-            taskService.complete(task.id, ["problemSolved": true])
+            taskService.complete(tasks.get(0).id, ["problemSolved": true])
         then:
             runtimeService.createProcessInstanceQuery().list() == []
     }
@@ -72,21 +85,21 @@ class VariablesAndConditionsTest extends Specification {
         when:
             String processInstanceId = runtimeService.startProcessInstanceByKey(PROCESS_DEFINITION, ["hardwareProblem": false])
         then:
-            Task task = taskService.createTaskQuery()
+            List<Task> tasks = taskService.createTaskQuery()
                     .processInstanceId(processInstanceId)
                     .active()
                     .list()
-            task.name == "fixSoftwareProblem"
+            tasks.get(0).name == "fixSoftwareProblem"
         when:
-            formService.submitTaskFormData(task.id, ["problemSolved": false])
+            formService.submitTaskFormData(tasks.get(0).id, ["problemSolved": "false"])
         then:
-            Task task2 = taskService.createTaskQuery()
+            List<Task> tasks2 = taskService.createTaskQuery()
                     .processInstanceId(processInstanceId)
                     .active()
                     .list()
-            task2.name == "fixHardwareProblem"
+            tasks2.get(0).name == "fixHardwareProblem"
         when:
-            taskService.complete(task2.id)
+            taskService.complete(tasks2.get(0).id)
         then:
             runtimeService.createProcessInstanceQuery().list() == []
     }
