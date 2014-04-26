@@ -55,7 +55,7 @@ class VariablesAndConditionsTest extends Specification {
             ProcessInstance processInstance = formService.submitStartFormData(processDefinition.id, ["hardwareProblem": "true"])
         then:
             List<Task> tasks = taskService.createTaskQuery()
-                    .processInstanceId(processInstanceId)
+                    .processInstanceId(processInstance.processInstanceId)
                     .active()
                     .list()
             tasks.get(0).name == "fixHardwareProblem"
