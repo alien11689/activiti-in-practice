@@ -26,6 +26,7 @@
         <activiti.version>5.15.1</activiti.version>
         <smtp.folder>${basedir}/target/mail</smtp.folder>
         <smtp.port>2525</smtp.port>
+        <subethasmtp.version>3.1.7</subethasmtp.version>
     </properties>
 
     <dependencies>
@@ -105,6 +106,12 @@
             <artifactId>activiti-spring</artifactId>
             <version>${activiti.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.subethamail</groupId>
+            <artifactId>subethasmtp</artifactId>
+            <version>${subethasmtp.version}</version>
+        </dependency>
+
     </dependencies>
 
     <repositories>
