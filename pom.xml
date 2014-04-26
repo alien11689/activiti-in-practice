@@ -12,7 +12,6 @@
     <modules>
         <module>01-simple</module>
         <module>common-activiti</module>
-        <module>mail-test-server</module>
     </modules>
 
     <properties>
@@ -24,9 +23,9 @@
         <h2.version>1.3.165</h2.version>
         <log4j.version>1.2.17</log4j.version>
         <activiti.version>5.15.1</activiti.version>
-        <smtp.folder>${basedir}/target/mail</smtp.folder>
-        <smtp.port>2525</smtp.port>
         <subethasmtp.version>3.1.7</subethasmtp.version>
+        <smtp.port>2525</smtp.port>
+        <smtp.host>localhost</smtp.host>
     </properties>
 
     <dependencies>
