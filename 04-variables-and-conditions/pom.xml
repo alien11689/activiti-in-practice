@@ -11,5 +11,11 @@
 
     <artifactId>04-variables-and-conditions</artifactId>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>com.blogspot.przybyszd.activitiinpractice</groupId>
+            <artifactId>common-activiti</artifactId>
+            <version>0.1</version>
+        </dependency>
+    </dependencies>
 </project>
