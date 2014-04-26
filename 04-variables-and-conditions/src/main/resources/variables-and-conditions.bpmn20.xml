@@ -14,9 +14,26 @@
                                        required="true" type="boolean"/>
             </extensionElements>
         </startEvent>
-        <sequenceFlow id="flow1" sourceRef="start" targetRef="fixHardwareProblem"/>
+        <sequenceFlow sourceRef="start" targetRef="isHardwareProblem"/>
+        <exclusiveGateway id="isHardwareProblem" />
+        <sequenceFlow sourceRef="isHardwareProblem" targetRef="fixHardwareProblem">
+            <conditionExpression xsi:type="tFormalExpression">${hardwareProblem}</conditionExpression>
+        </sequenceFlow>
         <userTask id="fixHardwareProblem" name="fixHardwareProblem"/>
-        <sequenceFlow id="flow2" sourceRef="fixHardwareProblem" targetRef="end"/>
+        <sequenceFlow sourceRef="fixHardwareProblem" targetRef="end"/>
+
+        <sequenceFlow sourceRef="isHardwareProblem" targetRef="fixSoftwareProblem">
+            <conditionExpression xsi:type="tFormalExpression">${!hardwareProblem}</conditionExpression>
+        </sequenceFlow>
+        <userTask id="fixSoftwareProblem" name="fixSoftwareProblem">
+            <extensionElements>
+                <activiti:formProperty id="problemSolved" type="boolean"/>
+            </extensionElements>
+        </userTask>
+        <sequenceFlow sourceRef="fixSoftwareProblem" targetRef="fixHardwareProblem">
+            <conditionExpression xsi:type="tFormalExpression">${!problemSolved}</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow sourceRef="fixSoftwareProblem" targetRef="end"/>
         <endEvent id="end" />
 
     </process>
