@@ -32,10 +32,10 @@ class ServiceTaskTest extends Specification {
             historicVariableInstances.size() == 3
             historicVariableInstances.get(0).variableName == "id"
             historicVariableInstances.get(0).value == 15l
-            historicVariableInstances.get(0).variableName == "person"
-            historicVariableInstances.get(0).value == new Person("Piter","Parker")
-            historicVariableInstances.get(0).variableName == "username"
-            historicVariableInstances.get(0).value == "Piter Parker"
+            historicVariableInstances.get(1).variableName == "person"
+            historicVariableInstances.get(1).value == new Person("Piter","Parker")
+            historicVariableInstances.get(2).variableName == "username"
+            historicVariableInstances.get(2).value == "Piter Parker"
 
     }
 }

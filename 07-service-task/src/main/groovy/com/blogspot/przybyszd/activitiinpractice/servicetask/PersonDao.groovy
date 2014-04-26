@@ -1,8 +1,8 @@
 package com.blogspot.przybyszd.activitiinpractice.servicetask
 
-/**
- * Created by alien on 4/26/14.
- */
+import org.springframework.stereotype.Component
+
+@Component("personDao")
 class PersonDao {
 
     long persist(Person person) {
