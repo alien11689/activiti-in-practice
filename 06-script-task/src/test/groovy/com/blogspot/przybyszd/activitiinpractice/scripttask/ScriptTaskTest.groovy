@@ -29,13 +29,15 @@ class ScriptTaskTest extends Specification {
             runtimeService.createProcessInstanceQuery().list() == []
             List<HistoricVariableInstance> historicVariableInstances = historyService.createHistoricVariableInstanceQuery()
                     .processInstanceId(processInstance.processInstanceId)
+                    .orderByVariableName()
+                    .asc()
                     .list()
             historicVariableInstances.size() == 3
-            historicVariableInstances.get(0).variableName == "username"
-            historicVariableInstances.get(0).value == "Piter Parker"
-            historicVariableInstances.get(1).variableName == "firstname"
-            historicVariableInstances.get(1).value == "Piter"
-            historicVariableInstances.get(2).variableName == "lastname"
-            historicVariableInstances.get(2).value == "Parker"
+            historicVariableInstances.get(0).variableName == "firstname"
+            historicVariableInstances.get(0).value == "Piter"
+            historicVariableInstances.get(1).variableName == "lastname"
+            historicVariableInstances.get(1).value == "Parker"
+            historicVariableInstances.get(2).variableName == "username"
+            historicVariableInstances.get(2).value == "Piter Parker"
     }
 }
