@@ -37,21 +37,19 @@ class ParallelEmailTask extends Specification {
             List<MimeMessage> messages = getMessagesSortedByRecipientTo()
             messages.size() == 2
 
-            messages.get(0).sender == "activiti@example.com"
-            messages.get(0).subject == "Event occured"
-            messages.get(0).getRecipients(Message.RecipientType.TO)[0].toString() == "john@doe.com"
-            messages.get(0).content == "Hello,\n an event occured.\n"
+            messages.get(0).getFrom()[0].toString().contains("activiti@example.com")
+            messages.get(0).subject == "Event occurred"
+            messages.get(0).getRecipients(Message.RecipientType.TO)[0].toString().contains("john@doe.com")
 
-            messages.get(0).sender == "activiti@example.com"
-            messages.get(0).subject == "Event occured"
-            messages.get(0).getRecipients(Message.RecipientType.TO)[0].toString() == "trolo@example.net"
-            messages.get(0).content == "Hello,\n an event occured.\n"
+            messages.get(1).getFrom()[0].toString().contains("activiti@example.com")
+            messages.get(1).subject == "Event occurred"
+            messages.get(1).getRecipients(Message.RecipientType.TO)[0].toString().contains("trolo@example.net")
     }
 
     @Ignore
     private List<MimeMessage> getMessagesSortedByRecipientTo() {
         wiser.getMessages()
                 .collect({ it.mimeMessage })
-                .sort({ MimeMessage m1, MimeMessage m2 -> m1.getRecipients(Message.RecipientType.TO)[0].toString().compareTo(m1.getRecipients(Message.RecipientType.TO)[0].toString()) })
+                .sort({ MimeMessage m1, MimeMessage m2 -> m1.getRecipients(Message.RecipientType.TO)[0].toString().compareTo(m2.getRecipients(Message.RecipientType.TO)[0].toString()) })
     }
 }
