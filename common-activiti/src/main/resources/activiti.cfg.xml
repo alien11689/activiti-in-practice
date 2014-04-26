@@ -22,7 +22,6 @@
         <property name="databaseSchema" value="ACTIVITI"/>
         <property name="mailServerHost" value="${smtp.host}"/>
         <property name="mailServerPort" value="${smtp.port}"/>
-        <property name="mailServerDefaultFrom" value="activiti@example.com"/>
     </bean>
 
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
