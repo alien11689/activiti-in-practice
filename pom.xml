@@ -12,6 +12,7 @@
     <modules>
         <module>01-simple</module>
         <module>common-activiti</module>
+        <module>08-email-task</module>
     </modules>
 
     <properties>
