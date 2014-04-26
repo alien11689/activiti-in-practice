@@ -8,8 +8,15 @@
 
     <process id="variables-and-conditions">
 
-        <startEvent id="start" />
-        <sequenceFlow id="flow1" sourceRef="start" targetRef="end"/>
+        <startEvent id="start">
+            <extensionElements>
+                <activiti:formProperty id="hardwareProblem" name="Czy to problem z hardware'm"
+                                       required="true" type="boolean"/>
+            </extensionElements>
+        </startEvent>
+        <sequenceFlow id="flow1" sourceRef="start" targetRef="fixHardwareProblem"/>
+        <userTask id="fixHardwareProblem" name="fixHardwareProblem"/>
+        <sequenceFlow id="flow2" sourceRef="fixHardwareProblem" targetRef="end"/>
         <endEvent id="end" />
 
     </process>
