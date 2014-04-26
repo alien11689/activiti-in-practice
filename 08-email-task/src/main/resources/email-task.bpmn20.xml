@@ -9,7 +9,25 @@
     <process id="notify-users">
 
         <startEvent id="start" />
-        <sequenceFlow id="flow1" sourceRef="start" targetRef="end"/>
+        <sequenceFlow sourceRef="start" targetRef="notifyUsers"/>
+        <serviceTask id="notifyUsers" activiti:type="mail">
+            <extensionElements>
+                <activiti:field name="subject" stringValue="Event occurred"/>
+                <activiti:field name="from" stringValue="activiti@example.com"/>
+                <activiti:field name="to" expression="${user}"/>
+                <activiti:field name="text">
+                    <activiti:expression>
+                        Hello ${user},
+                        an event occurred.
+                    </activiti:expression>
+                </activiti:field>
+            </extensionElements>
+            <multiInstanceLoopCharacteristics isSequential="false">
+                <loopDataInputRef>users</loopDataInputRef>
+                <inputDataItem name="user"/>
+            </multiInstanceLoopCharacteristics>
+        </serviceTask>
+        <sequenceFlow sourceRef="notifyUsers" targetRef="end"/>
         <endEvent id="end" />
 
     </process>
