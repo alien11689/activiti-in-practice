@@ -20,6 +20,9 @@
         <property name="history" value="full"/>
         <property name="transactionManager" ref="transactionManager"/>
         <property name="databaseSchema" value="ACTIVITI"/>
+        <property name="mailServerHost" value="localhost"/>
+        <property name="mailServerPort" value="2525"/>
+        <property name="mailServerDefaultFrom" value="activiti@example.com"/>
     </bean>
 
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
