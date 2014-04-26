@@ -1,23 +1,57 @@
 package com.blogspot.przybyszd.activitiinpractice.emailtask
 
+import jdk.nashorn.internal.ir.annotations.Ignore
 import org.activiti.engine.RuntimeService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.test.context.ContextConfiguration
+import org.subethamail.wiser.Wiser
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import javax.mail.Message
+import javax.mail.internet.MimeMessage
+
+@ContextConfiguration(locations = "/test-context.xml")
 class ParallelEmailTask extends Specification {
 
     @Autowired
     RuntimeService runtimeService
 
+    @Autowired
+    Wiser wiser
+
+    def setup() {
+        wiser.start()
+    }
+
+    def cleanup() {
+        wiser.stop()
+    }
+
     @Unroll
-    def "should "() {
+    def "should send mail to recipients"() {
         when:
             runtimeService.startProcessInstanceByKey("notify-users", ["users": ["trolo@example.net", "john@doe.com"]])
         then:
             runtimeService.createProcessInstanceQuery().list() == []
+            List<MimeMessage> messages = getMessagesSortedByRecipientTo()
+            messages.size() == 2
 
-        where:
+            messages.get(0).sender == "activiti@example.com"
+            messages.get(0).subject == "Event occured"
+            messages.get(0).getRecipients(Message.RecipientType.TO)[0].toString() == "john@doe.com"
+            messages.get(0).content == "Hello,\n an event occured.\n"
 
+            messages.get(0).sender == "activiti@example.com"
+            messages.get(0).subject == "Event occured"
+            messages.get(0).getRecipients(Message.RecipientType.TO)[0].toString() == "trolo@example.net"
+            messages.get(0).content == "Hello,\n an event occured.\n"
+    }
+
+    @Ignore
+    private List<MimeMessage> getMessagesSortedByRecipientTo() {
+        wiser.getMessages()
+                .collect({ it.mimeMessage })
+                .sort({ MimeMessage m1, MimeMessage m2 -> m1.getRecipients(Message.RecipientType.TO)[0].toString().compareTo(m1.getRecipients(Message.RecipientType.TO)[0].toString()) })
     }
 }
