@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn"
-             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
-             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema"
+             xmlns:activiti="http://activiti.org/bpmn"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
              expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
 
     <process id="add-person">
 
-        <startEvent id="start" />
-        <sequenceFlow id="flow1" sourceRef="start" targetRef="end"/>
-        <endEvent id="end" />
+        <startEvent id="start"/>
+        <sequenceFlow sourceRef="start" targetRef="createPerson"/>
+        <serviceTask id="createPerson"
+                     activiti:class="com.blogspot.przybyszd.activitiinpractice.servicetask.PersonCreator"/>
+        <sequenceFlow sourceRef="createPerson" targetRef="persistPerson"/>
+        <serviceTask id="persistPerson" activiti:expression="#{personDao.persist(person)}"
+                     activiti:resultVariable="id"/>
+        <sequenceFlow sourceRef="persistPerson" targetRef="end"/>
+        <endEvent id="end"/>
 
     </process>
 
