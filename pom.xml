@@ -12,6 +12,7 @@
     <modules>
         <module>01-simple</module>
         <module>common-activiti</module>
+        <module>07-service-task</module>
     </modules>
 
     <properties>
