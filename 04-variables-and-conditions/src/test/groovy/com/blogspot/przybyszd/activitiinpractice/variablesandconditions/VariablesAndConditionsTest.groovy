@@ -6,6 +6,7 @@ import org.activiti.engine.RuntimeService
 import org.activiti.engine.TaskService
 import org.activiti.engine.form.StartFormData
 import org.activiti.engine.repository.ProcessDefinition
+import org.activiti.engine.runtime.ProcessInstance
 import org.activiti.engine.task.Task
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
@@ -51,7 +52,7 @@ class VariablesAndConditionsTest extends Specification {
                     .processDefinitionKey(PROCESS_DEFINITION)
                     .singleResult()
         when:
-            String processInstanceId = formService.submitStartFormData(processDefinition.id, ["hardwareProblem": "true"])
+            ProcessInstance processInstance = formService.submitStartFormData(processDefinition.id, ["hardwareProblem": "true"])
         then:
             List<Task> tasks = taskService.createTaskQuery()
                     .processInstanceId(processInstanceId)
@@ -67,10 +68,10 @@ class VariablesAndConditionsTest extends Specification {
     @Unroll
     def "should only fix software problem"() {
         when:
-            String processInstanceId = runtimeService.startProcessInstanceByKey(PROCESS_DEFINITION, ["hardwareProblem": false])
+            ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(PROCESS_DEFINITION, ["hardwareProblem": false])
         then:
             List<Task> tasks = taskService.createTaskQuery()
-                    .processInstanceId(processInstanceId)
+                    .processInstanceId(processInstance.processInstanceId)
                     .active()
                     .list()
             tasks.get(0).name == "fixSoftwareProblem"
@@ -83,10 +84,10 @@ class VariablesAndConditionsTest extends Specification {
     @Unroll
     def "should fix hardware problem when no software problem"() {
         when:
-            String processInstanceId = runtimeService.startProcessInstanceByKey(PROCESS_DEFINITION, ["hardwareProblem": false])
+            ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(PROCESS_DEFINITION, ["hardwareProblem": false])
         then:
             List<Task> tasks = taskService.createTaskQuery()
-                    .processInstanceId(processInstanceId)
+                    .processInstanceId(processInstance.processInstanceId)
                     .active()
                     .list()
             tasks.get(0).name == "fixSoftwareProblem"
@@ -94,7 +95,7 @@ class VariablesAndConditionsTest extends Specification {
             formService.submitTaskFormData(tasks.get(0).id, ["problemSolved": "false"])
         then:
             List<Task> tasks2 = taskService.createTaskQuery()
-                    .processInstanceId(processInstanceId)
+                    .processInstanceId(processInstance.processInstanceId)
                     .active()
                     .list()
             tasks2.get(0).name == "fixHardwareProblem"
