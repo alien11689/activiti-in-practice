@@ -1,10 +1,8 @@
 package com.blogspot.przybyszd.activitiinpractice.timer
 
 import com.jayway.awaitility.groovy.AwaitilitySupport
-import org.activiti.engine.HistoryService
 import org.activiti.engine.RuntimeService
 import org.activiti.engine.TaskService
-import org.activiti.engine.history.HistoricVariableInstance
 import org.activiti.engine.runtime.ProcessInstance
 import org.activiti.engine.task.Task
 import org.springframework.beans.factory.annotation.Autowired
@@ -32,7 +30,7 @@ class TimerTest extends Specification {
             processInstance != null
             taskService.createTaskQuery().active().list() == []
         when:
-            await().atMost(4, TimeUnit.SECONDS).until({
+            await().pollDelay(500, TimeUnit.MILLISECONDS).atMost(5, TimeUnit.SECONDS).until({
                 taskService.createTaskQuery().active().list() != []
             })
             Task task = taskService.createTaskQuery().taskName("studentGivesSolution").singleResult()
@@ -52,18 +50,17 @@ class TimerTest extends Specification {
             ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("exam-process")
         then:
             processInstance != null
-            taskService.createTaskQuery().active().list() == []
+            taskService.createTaskQuery().list() == []
         when:
-            await().atMost(4, TimeUnit.SECONDS).until({
-                taskService.createTaskQuery().active().list() != []
+            await().pollDelay(500, TimeUnit.MILLISECONDS).atMost(4, TimeUnit.SECONDS).until({
+                taskService.createTaskQuery().list() != []
             })
             Task task = taskService.createTaskQuery().taskName("studentGivesSolution").singleResult()
         then:
             task != null
         when:
-            await().atMost(4,TimeUnit.SECONDS).until {
-                taskService.createTaskQuery().taskName("studentGivesSolution").singleResult() == null &&
-                        taskService.createTaskQuery().taskName("teacherGivesSolution").singleResult() != null
+            await().pollDelay(500, TimeUnit.MILLISECONDS).atMost(15, TimeUnit.SECONDS).until {
+                taskService.createTaskQuery().taskName("teacherGivesSolution").singleResult() != null
             }
             task = taskService.createTaskQuery().taskName("teacherGivesSolution").singleResult()
         then:
