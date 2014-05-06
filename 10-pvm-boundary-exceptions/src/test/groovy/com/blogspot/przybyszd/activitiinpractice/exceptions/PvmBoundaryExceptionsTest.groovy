@@ -51,7 +51,7 @@ class PvmBoundaryExceptionsTest extends Specification {
         when:
             Task task = taskService.createTaskQuery().
                     processInstanceId(processInstance.processInstanceId).
-                    taskName("checkCustomerData").singleResult()
+                    taskName("manualFetchData").singleResult()
         then:
             task != null
         when:
@@ -80,7 +80,7 @@ class PvmBoundaryExceptionsTest extends Specification {
         when:
             Task task = taskService.createTaskQuery().
                     processInstanceId(processInstance.processInstanceId).
-                    taskName("checkCustomerData").singleResult()
+                    taskName("manualFetchData").singleResult()
         then:
             task != null
         when:
