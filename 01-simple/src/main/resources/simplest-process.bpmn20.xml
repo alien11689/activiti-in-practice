@@ -9,7 +9,16 @@
     <process id="simplest-process">
 
         <startEvent id="start" />
-        <sequenceFlow id="flow1" sourceRef="start" targetRef="end"/>
+        <sequenceFlow sourceRef="start" targetRef="timer"/>
+        <intermediateCatchEvent id="timer">
+            <timerEventDefinition>
+                <timeDuration>PT1S</timeDuration>
+            </timerEventDefinition>
+        </intermediateCatchEvent>
+        <sequenceFlow sourceRef="timer" targetRef="studentGivesSolution"/>
+        <userTask id="studentGivesSolution" name="studentGivesSolution"/>
+
+        <userTask id="teacherGivesSolution" name="teacherGivesSolution"/>
         <endEvent id="end" />
 
     </process>
