@@ -35,7 +35,7 @@ class TimerTest extends Specification {
             await().atMost(2, TimeUnit.SECONDS).until({
                 taskService.createTaskQuery().active().list() != []
             })
-            Task task = taskService.createTaskQuery().taskName("student-gives-solution").singleResult()
+            Task task = taskService.createTaskQuery().taskName("studentGivesSolution").singleResult()
         then:
             task != null
         when:
@@ -57,15 +57,15 @@ class TimerTest extends Specification {
             await().atMost(2, TimeUnit.SECONDS).until({
                 taskService.createTaskQuery().active().list() != []
             })
-            Task task = taskService.createTaskQuery().taskName("student-gives-solution").singleResult()
+            Task task = taskService.createTaskQuery().taskName("studentGivesSolution").singleResult()
         then:
             task != null
         when:
             await().atMost(2,TimeUnit.SECONDS).until {
-                taskService.createTaskQuery().taskName("student-gives-solution").singleResult() == null &&
-                        taskService.createTaskQuery().taskName("teacher-gives-solution").singleResult() != null
+                taskService.createTaskQuery().taskName("studentGivesSolution").singleResult() == null &&
+                        taskService.createTaskQuery().taskName("teacherGivesSolution").singleResult() != null
             }
-            task = taskService.createTaskQuery().taskName("teacher-gives-solution").singleResult()
+            task = taskService.createTaskQuery().taskName("teacherGivesSolution").singleResult()
         then:
             task != null
         when:
