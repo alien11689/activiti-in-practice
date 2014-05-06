@@ -6,19 +6,10 @@
              xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema"
              expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
 
-    <process id="simplest-process">
+    <process id="simple-process">
 
         <startEvent id="start" />
-        <sequenceFlow sourceRef="start" targetRef="timer"/>
-        <intermediateCatchEvent id="timer">
-            <timerEventDefinition>
-                <timeDuration>PT1S</timeDuration>
-            </timerEventDefinition>
-        </intermediateCatchEvent>
-        <sequenceFlow sourceRef="timer" targetRef="studentGivesSolution"/>
-        <userTask id="studentGivesSolution" name="studentGivesSolution"/>
-
-        <userTask id="teacherGivesSolution" name="teacherGivesSolution"/>
+        <sequenceFlow id="flow1" sourceRef="start" targetRef="end"/>
         <endEvent id="end" />
 
     </process>
