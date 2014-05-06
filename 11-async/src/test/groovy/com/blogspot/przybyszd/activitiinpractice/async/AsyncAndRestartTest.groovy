@@ -34,7 +34,7 @@ class AsyncAndRestartTest extends Specification {
         then:
             runtimeService.createProcessInstanceQuery().list() != []
         when:
-            await().pollDelay(500, TimeUnit.MILLISECONDS).atMost(7, TimeUnit.SECONDS).until {
+            await().pollDelay(3,TimeUnit.SECONDS).pollInterval(1, TimeUnit.SECONDS).atMost(6, TimeUnit.SECONDS).until {
                 runtimeService.createProcessInstanceQuery().list() == []
             }
         then:
@@ -60,24 +60,25 @@ class AsyncAndRestartTest extends Specification {
         then:
             runtimeService.createProcessInstanceQuery().list() != []
         when:
-            await().pollDelay(500, TimeUnit.MILLISECONDS).atMost(20, TimeUnit.SECONDS).until {
-                runtimeService.createProcessInstanceQuery().list() == []
+            Thread.sleep(9000)
+            await().pollInterval(1,TimeUnit.SECONDS).atMost(3, TimeUnit.SECONDS).until {
+                println managementService.createJobQuery().
+                        withException().
+                        list()
+                managementService.createJobQuery().
+                        processInstanceId(processInstance.processInstanceId).
+                        withException().
+                        list() != []
             }
         then:
-            List<Job> jobs = managementService.createJobQuery().
+            Job job = managementService.createJobQuery().
                     processInstanceId(processInstance.processInstanceId).
                     withException().
-                    list()
-            jobs != null
+                    singleResult()
+            job != null
         when:
             Transcoder.acceptOthers(true)
-            managementService.executeJob(jobs.get(0).id)
-        then:
-            runtimeService.createProcessInstanceQuery().list() != []
-        when:
-            await().pollDelay(500, TimeUnit.MILLISECONDS).atMost(7, TimeUnit.SECONDS).until {
-                runtimeService.createProcessInstanceQuery().list() == []
-            }
+            managementService.executeJob(job.id)
         then:
             List<HistoricVariableInstance> variables = historyService.createHistoricVariableInstanceQuery().
                     processInstanceId(processInstance.processInstanceId).

@@ -12,14 +12,15 @@ class Transcoder {
 
     boolean transcode(String file) {
         if (file.endsWith(".avi")) {
-            Thread.sleep(2000)
+            Thread.sleep(1000)
             return true
         }
         if (acceptOthers) {
-            Thread.sleep(2000)
+            Thread.sleep(1000)
             return true
         }
         Thread.sleep(1000)
+        println "Error occured"
         throw new UnsupportedOperationException()
 
     }
