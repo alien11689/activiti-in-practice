@@ -3,7 +3,9 @@ package com.blogspot.przybyszd.activitiinpractice.exceptions
 import org.activiti.engine.impl.pvm.PvmTransition
 import org.activiti.engine.impl.pvm.delegate.ActivityBehavior
 import org.activiti.engine.impl.pvm.delegate.ActivityExecution
+import org.springframework.stereotype.Component
 
+@Component
 class CustomerFetcher implements ActivityBehavior{
 
     @Override

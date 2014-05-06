@@ -32,6 +32,7 @@ class PvmBoundaryExceptionsTest extends Specification {
             List<HistoricVariableInstance> variables = historyService.createHistoricVariableInstanceQuery()
                     .processInstanceId(processInstance.processInstanceId)
                     .orderByVariableName()
+                    .asc()
                     .list()
             variables.get(0).variableName == "customer"
             variables.get(0).value == "Smith"
@@ -54,12 +55,13 @@ class PvmBoundaryExceptionsTest extends Specification {
         then:
             task != null
         when:
-            taskService.complete(task.id, ["fetchData":true])
+            taskService.complete(task.id, ["fetchData": true])
         then:
             runtimeService.createProcessInstanceQuery().list() == []
             List<HistoricVariableInstance> variables = historyService.createHistoricVariableInstanceQuery()
                     .processInstanceId(processInstance.processInstanceId)
                     .orderByVariableName()
+                    .asc()
                     .list()
             variables.get(0).variableName == "customer"
             variables.get(0).value == "Kowalski"
@@ -82,12 +84,13 @@ class PvmBoundaryExceptionsTest extends Specification {
         then:
             task != null
         when:
-            taskService.complete(task.id, ["fetchData":false])
+            taskService.complete(task.id, ["fetchData": false])
         then:
             runtimeService.createProcessInstanceQuery().list() == []
             List<HistoricVariableInstance> variables = historyService.createHistoricVariableInstanceQuery()
                     .processInstanceId(processInstance.processInstanceId)
                     .orderByVariableName()
+                    .asc()
                     .list()
             variables.get(0).variableName == "customer"
             variables.get(0).value == "Kowalski"
