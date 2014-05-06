@@ -9,7 +9,9 @@
     <process id="transcode-process">
 
         <startEvent id="start" />
-        <sequenceFlow id="flow1" sourceRef="start" targetRef="end"/>
+        <sequenceFlow sourceRef="start" targetRef="transcode"/>
+        <serviceTask id="transcode" activiti:expression="${transcoder.transcode(file)}" activiti:async="true"/>
+        <sequenceFlow sourceRef="transcode" targetRef="end"/>
         <endEvent id="end" />
 
     </process>
