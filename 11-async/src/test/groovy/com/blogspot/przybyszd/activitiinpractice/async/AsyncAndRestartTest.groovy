@@ -48,8 +48,9 @@ class AsyncAndRestartTest extends Specification {
                     orderByVariableName().
                     asc().
                     list()
-            variables.get(0).variableName == "transcoded"
-            variables.get(0).value == true
+            variables.get(0).variableName == "file"
+            variables.get(1).variableName == "transcoded"
+            variables.get(1).value == true
     }
 
     @Unroll
@@ -83,8 +84,9 @@ class AsyncAndRestartTest extends Specification {
                     orderByVariableName().
                     asc().
                     list()
-            variables.get(0).variableName == "transcoded"
-            variables.get(0).value == true
+            variables.get(0).variableName == "file"
+            variables.get(1).variableName == "transcoded"
+            variables.get(1).value == true
     }
 
     def setup() {
