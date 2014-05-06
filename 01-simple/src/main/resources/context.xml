@@ -12,7 +12,7 @@
     <bean id="processEngineConfiguration" parent="abstractProcessEngineConfiguration">
         <property name="deploymentResources">
             <list>
-                <value>classpath:exam-process.bpmn20.xml</value>
+                <value>classpath:simplest-process.bpmn20.xml</value>
             </list>
         </property>
     </bean>
