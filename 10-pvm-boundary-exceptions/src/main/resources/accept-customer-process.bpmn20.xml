@@ -5,6 +5,8 @@
              typeLanguage="http://www.w3.org/2001/XMLSchema"
              expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
 
+    <error id="unknownCustomer" errorCode="UNKNOWN_CUSTOMER"/>
+
     <process id="accept-customer-process">
 
         <startEvent id="start"/>
@@ -15,6 +17,7 @@
 
         <sequenceFlow sourceRef="fetchData" targetRef="manualFetchData" id="manualFetch"/>
         <userTask id="manualFetchData" name="manualFetchData"/>
+        <sequenceFlow sourceRef="manualFetchData" targetRef="validateCustomer"/>
 
         <serviceTask id="validateCustomer" activiti:expression="${customerValidator.validate(fetchData)}"/>
         <sequenceFlow sourceRef="validateCustomer" targetRef="acceptCustomer"/>
@@ -23,12 +26,17 @@
                      activiti:resultVariable="customerAccepted"/>
         <sequenceFlow sourceRef="acceptCustomer" targetRef="end"/>
 
-        <serviceTask id="rejectCustomer" activiti:expression="${customerRejecter.reject()}"
-                     activiti:resultVariable="customerAccepted"/>
 
         <sequenceFlow sourceRef="start" targetRef="end"/>
         <endEvent id="end"/>
 
+        <boundaryEvent attachedToRef="validateCustomer" id="unknownCustomerBoundary">
+            <errorEventDefinition errorRef="unknownCustomer"/>
+        </boundaryEvent>
+        <sequenceFlow sourceRef="unknownCustomerBoundary" targetRef="rejectCustomer"/>
+        <serviceTask id="rejectCustomer" activiti:expression="${customerRejecter.reject()}"
+                     activiti:resultVariable="customerAccepted"/>
+        <sequenceFlow sourceRef="rejectCustomer" targetRef="end"/>
     </process>
 
 </definitions>
