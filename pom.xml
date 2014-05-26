@@ -12,6 +12,7 @@
     <modules>
         <module>01-simple</module>
         <module>common-activiti</module>
+        <module>13-subprocess-started-by-error</module>
     </modules>
 
     <properties>
