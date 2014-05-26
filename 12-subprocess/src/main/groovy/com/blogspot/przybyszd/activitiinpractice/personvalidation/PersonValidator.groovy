@@ -1,7 +1,9 @@
 package com.blogspot.przybyszd.activitiinpractice.personvalidation
 
 import org.activiti.engine.delegate.BpmnError
+import org.springframework.stereotype.Component
 
+@Component
 class PersonValidator {
 
     void validateWithPossibleNull(String value) {
