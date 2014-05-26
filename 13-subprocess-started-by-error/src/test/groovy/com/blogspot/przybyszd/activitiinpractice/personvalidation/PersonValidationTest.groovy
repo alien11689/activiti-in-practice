@@ -1,9 +1,10 @@
 package com.blogspot.przybyszd.activitiinpractice.personvalidation
 
+import org.activiti.engine.HistoryService
 import org.activiti.engine.RuntimeService
 import org.activiti.engine.TaskService
+import org.activiti.engine.history.HistoricVariableInstance
 import org.activiti.engine.runtime.ProcessInstance
-import org.activiti.engine.task.Task
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import spock.lang.Specification
@@ -17,34 +18,55 @@ class PersonValidationTest extends Specification {
     @Autowired
     TaskService taskService
 
+    @Autowired
+    HistoryService historyService
+
     def "should pass when person is valid"() {
         when:
-            runtimeService.startProcessInstanceByKey("person-validation", [firstName: "John", lastName: "Smith"])
+            ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("person-validation", [firstName: "John", lastName: "Smith"])
         then:
             runtimeService.createProcessInstanceQuery().list() == []
+            List<HistoricVariableInstance> variables = historyService.createHistoricVariableInstanceQuery()
+                    .processInstanceId(processInstance.processInstanceId)
+                    .orderByVariableName()
+                    .asc()
+                    .list()
+            variables.get(0).variableName == "firstName"
+            variables.get(0).value == "John"
+            variables.get(1).variableName == "lastName"
+            variables.get(1).value == "Smith"
+
     }
 
     def "should pass after first name set to valid"() {
         when:
             ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("person-validation", [firstName: "john", lastName: "Smith"])
         then:
-            Task task = taskService.createTaskQuery().active().executionId(processInstance.processInstanceId).singleResult()
-            task.name == "enterPersonData"
-        when:
-            taskService.complete(task.id, [firstName: "John"])
-        then:
             runtimeService.createProcessInstanceQuery().list() == []
+            List<HistoricVariableInstance> variables = historyService.createHistoricVariableInstanceQuery()
+                    .processInstanceId(processInstance.processInstanceId)
+                    .orderByVariableName()
+                    .asc()
+                    .list()
+            variables.get(0).variableName == "firstName"
+            variables.get(0).value == "Jan"
+            variables.get(1).variableName == "lastName"
+            variables.get(1).value == "Testowski"
     }
 
     def "should pass after last name set to valid"() {
         when:
             ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("person-validation", [firstName: "John", lastName: "smith"])
         then:
-            Task task = taskService.createTaskQuery().active().executionId(processInstance.processInstanceId).singleResult()
-            task.name == "enterPersonData"
-        when:
-            taskService.complete(task.id, [lastName: "Smith"])
-        then:
             runtimeService.createProcessInstanceQuery().list() == []
+            List<HistoricVariableInstance> variables = historyService.createHistoricVariableInstanceQuery()
+                    .processInstanceId(processInstance.processInstanceId)
+                    .orderByVariableName()
+                    .asc()
+                    .list()
+            variables.get(0).variableName == "firstName"
+            variables.get(0).value == "Jan"
+            variables.get(1).variableName == "lastName"
+            variables.get(1).value == "Testowski"
     }
 }

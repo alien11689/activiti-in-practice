@@ -1,20 +1,15 @@
 package com.blogspot.przybyszd.activitiinpractice.personvalidation
 
-import org.activiti.engine.delegate.BpmnError
 import org.springframework.stereotype.Component
 
 @Component
 class PersonValidator {
 
-    void validateWithPossibleNull(String value) {
-        if (value != null && (value == "" || !Character.isUpperCase(value.charAt(0)))) {
-            throw new BpmnError("InvalidPerson")
-        }
+    boolean validateWithPossibleNull(String value) {
+        value == null || (value != "" && Character.isUpperCase(value.charAt(0)))
     }
 
-    void validateWithoutNull(String value) {
-        if (value == "" || !Character.isUpperCase(value.charAt(0))) {
-            throw new BpmnError("InvalidPerson")
-        }
+    boolean validateWithoutNull(String value) {
+        value != "" && Character.isUpperCase(value.charAt(0))
     }
 }
