@@ -22,10 +22,10 @@
         <sequenceFlow sourceRef="personValidation" targetRef="end"/>
         <endEvent id="end"/>
 
-        <boundaryEvent attachedToRef="personValidation">
+        <boundaryEvent attachedToRef="personValidation" id="invalidPersonHandler">
             <errorEventDefinition id="InvalidPerson"/>
         </boundaryEvent>
-        <sequenceFlow sourceRef="personValidation" targetRef="enterPersonData"/>
+        <sequenceFlow sourceRef="invalidPersonHandler" targetRef="enterPersonData"/>
         <userTask id="enterPersonData" name="enterPersonData"/>
         <sequenceFlow sourceRef="enterPersonData" targetRef="personValidation"/>
     </process>
