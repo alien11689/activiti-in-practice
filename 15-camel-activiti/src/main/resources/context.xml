@@ -18,7 +18,7 @@
         </property>
     </bean>
 
-    <camelContext id="camelContext" xmlns="http://camel.apache.org/schema/spring">
+    <camelContext id="orderCamelContext" xmlns="http://camel.apache.org/schema/spring">
         <packageScan>
             <package>com.blogspot.przybyszd.activitiinpractice.processorder.route</package>
         </packageScan>

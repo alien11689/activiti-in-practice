@@ -45,13 +45,16 @@ class ProcessOrderTest extends Specification {
                     .orderByVariableName()
                     .asc()
                     .list()
-            variables.size() == 3
+            variables.size() == 5
             variables.get(0).variableName == "amount"
             variables.get(0).value == 45
-            variables.get(1).variableName == "name"
-            variables.get(1).value == "book"
-            variables.get(2).variableName == "orderFulfilled"
-            variables.get(2).value == true
+            variables.get(1).variableName == "breadcrumbId"
+            variables.get(2).variableName == "camelBody"
+            variables.get(2).value == null
+            variables.get(3).variableName == "name"
+            variables.get(3).value == "book"
+            variables.get(4).variableName == "orderFulfilled"
+            variables.get(4).value == true
     }
 
     def "should not fulfill order"() {
@@ -72,12 +75,15 @@ class ProcessOrderTest extends Specification {
                     .orderByVariableName()
                     .asc()
                     .list()
-            variables.size() == 3
+            variables.size() == 5
             variables.get(0).variableName == "amount"
             variables.get(0).value == 10000
-            variables.get(1).variableName == "name"
-            variables.get(1).value == "book"
-            variables.get(2).variableName == "orderFulfilled"
-            variables.get(2).value == false
+            variables.get(1).variableName == "breadcrumbId"
+            variables.get(2).variableName == "camelBody"
+            variables.get(2).value == null
+            variables.get(3).variableName == "name"
+            variables.get(3).value == "book"
+            variables.get(4).variableName == "orderFulfilled"
+            variables.get(4).value == false
     }
 }
