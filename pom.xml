@@ -12,6 +12,7 @@
     <modules>
         <module>01-simple</module>
         <module>common-activiti</module>
+        <module>14-call-activity</module>
     </modules>
 
     <properties>
