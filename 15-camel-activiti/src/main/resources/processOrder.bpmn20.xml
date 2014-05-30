@@ -1,16 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn"
-             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
-             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema"
+             xmlns:activiti="http://activiti.org/bpmn"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
              expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
 
     <process id="process-order">
 
-        <startEvent id="start" />
-        <sequenceFlow id="flow1" sourceRef="start" targetRef="end"/>
-        <endEvent id="end" />
+        <startEvent id="start"/>
+        <sequenceFlow sourceRef="start" targetRef="enterOrder"/>
+        <userTask id="enterOrder" name="enter-order"/>
+        <sequenceFlow sourceRef="enterOrder" targetRef="processOrder"/>
+        <serviceTask id="processOrder" activiti:type="camel">
+            <extensionElements>
+                <activiti:field name="camelContext" stringValue="orderCamelContext"/>
+                <activiti:field name="camelBehaviorClass" stringValue="org.activiti.camel.impl.CamelBehaviorCamelBodyImpl" />
+            </extensionElements>
+        </serviceTask>
+        <sequenceFlow sourceRef="processOrder" targetRef="waitForProcessingEnd"/>
+        <receiveTask id="waitForProcessingEnd"/>
+        <sequenceFlow sourceRef="waitForProcessingEnd" targetRef="end"/>
+        <endEvent id="end"/>
 
     </process>
 
