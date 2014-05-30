@@ -2,15 +2,34 @@
 
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn"
-             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
-             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
              expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
 
     <process id="add-user">
 
-        <startEvent id="start" />
-        <sequenceFlow id="flow1" sourceRef="start" targetRef="end"/>
-        <endEvent id="end" />
+        <startEvent id="start"/>
+        <sequenceFlow sourceRef="start" targetRef="enterUserData"/>
+        <userTask id="enterUserData" name="enter-user-data"/>
+        <sequenceFlow sourceRef="enterUserData" targetRef="addUser">
+            <conditionExpression xsi:type="tFormalExpression">
+                ${!createGroup}
+            </conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow sourceRef="enterUserData" targetRef="addGroup">
+            <conditionExpression xsi:type="tFormalExpression">
+                ${createGroup}
+            </conditionExpression>
+        </sequenceFlow>
+        <callActivity id="addGroup" calledElement="add-group">
+            <extensionElements>
+                <activiti:out target="groupCreated" source="groupAdded"/>
+                <activiti:out target="groupName" source="groupName"/>
+            </extensionElements>
+        </callActivity>
+        <sequenceFlow sourceRef="addGroup" targetRef="addUser"/>
+        <serviceTask id="addUser" activiti:expression="#{userAdder.add()}" activiti:resultVariable="userAdded"/>
+        <sequenceFlow sourceRef="addUser" targetRef="end"/>
+        <endEvent id="end"/>
 
     </process>
 
