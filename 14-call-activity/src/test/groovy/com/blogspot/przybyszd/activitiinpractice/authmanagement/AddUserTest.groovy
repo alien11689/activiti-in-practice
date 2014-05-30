@@ -40,11 +40,13 @@ class AddUserTest extends Specification {
                     .orderByVariableName()
                     .asc()
                     .list()
-            variables.size() == 2
-            variables.get(0).variableName == "userAdded"
-            variables.get(0).value == true
-            variables.get(1).variableName == "userName"
-            variables.get(1).value == "dpr"
+            variables.size() == 3
+            variables.get(0).variableName == "createGroup"
+            variables.get(0).value == false
+            variables.get(1).variableName == "userAdded"
+            variables.get(1).value == true
+            variables.get(2).variableName == "userName"
+            variables.get(2).value == "dpr"
     }
 
     def "should add user with creating group"() {
@@ -60,12 +62,11 @@ class AddUserTest extends Specification {
             taskService.complete(task.id, [userName: "dpr", createGroup: true])
         then:
             Task task2 = taskService.createTaskQuery()
-                    .processInstanceId(processInstance.processInstanceId)
                     .singleResult()
             task2 != null
             task2.name == "enter-group-data"
         when:
-            taskService.complete(task.id, [groupName: "tester"])
+            taskService.complete(task2.id, [groupName: "tester"])
         then:
             runtimeService.createExecutionQuery().list() == []
             List<HistoricVariableInstance> variables = historyService.createHistoricVariableInstanceQuery()
@@ -73,14 +74,16 @@ class AddUserTest extends Specification {
                     .orderByVariableName()
                     .asc()
                     .list()
-            variables.size() == 4
-            variables.get(0).variableName == "groupAdded"
+            variables.size() == 5
+            variables.get(0).variableName == "createGroup"
             variables.get(0).value == true
-            variables.get(1).variableName == "groupName"
-            variables.get(1).value == "tester"
-            variables.get(2).variableName == "userAdded"
-            variables.get(2).value == true
-            variables.get(3).variableName == "userName"
-            variables.get(3).value == "dpr"
+            variables.get(1).variableName == "groupCreated"
+            variables.get(1).value == true
+            variables.get(2).variableName == "groupName"
+            variables.get(2).value == "tester"
+            variables.get(3).variableName == "userAdded"
+            variables.get(3).value == true
+            variables.get(4).variableName == "userName"
+            variables.get(4).value == "dpr"
     }
 }
