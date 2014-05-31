@@ -12,7 +12,7 @@ import javax.mail.Message
 import javax.mail.internet.MimeMessage
 
 @ContextConfiguration(locations = "/test-context.xml")
-class ParallelEmailTask extends Specification {
+class ParallelEmailTaskTest extends Specification {
 
     @Autowired
     RuntimeService runtimeService
