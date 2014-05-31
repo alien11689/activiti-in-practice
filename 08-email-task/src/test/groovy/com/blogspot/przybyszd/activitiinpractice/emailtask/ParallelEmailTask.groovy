@@ -1,10 +1,10 @@
 package com.blogspot.przybyszd.activitiinpractice.emailtask
 
-import jdk.nashorn.internal.ir.annotations.Ignore
 import org.activiti.engine.RuntimeService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.subethamail.wiser.Wiser
+import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Unroll
 
