@@ -7,7 +7,7 @@
 
     <import resource="activiti.cfg.xml"/>
     <context:annotation-config/>
-    <context:component-scan base-package="com.blogspot.przybyszd.activitiinpractice.timer"/>
+    <context:component-scan base-package="com.blogspot.przybyszd.activitiinpractice.simple"/>
 
     <bean id="processEngineConfiguration" parent="abstractProcessEngineConfiguration">
         <property name="deploymentResources">
