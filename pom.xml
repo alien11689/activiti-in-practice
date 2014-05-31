@@ -12,7 +12,6 @@
     <modules>
         <module>01-simple</module>
         <module>common-activiti</module>
-        <module>15-camel-activiti</module>
     </modules>
 
     <properties>
