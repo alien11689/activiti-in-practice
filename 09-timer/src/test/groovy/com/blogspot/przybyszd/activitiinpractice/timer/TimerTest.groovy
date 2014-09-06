@@ -55,15 +55,15 @@ class TimerTest extends Specification {
         when:
             processEngineConfiguration.clock.currentTime = DateTime.now().plusHours(1).toDate()
         then:
-            Task task = taskService.createTaskQuery().taskName("studentGivesSolution").singleResult()
-            task != null
+            Task studentTask = taskService.createTaskQuery().taskName("studentGivesSolution").singleResult()
+            studentTask != null
         when:
             processEngineConfiguration.clock.currentTime = DateTime.now().plusHours(1).toDate()
         then:
-            task = taskService.createTaskQuery().taskName("teacherGivesSolution").singleResult()
-            task != null
+            Task teacherTask = taskService.createTaskQuery().taskName("teacherGivesSolution").singleResult()
+            teacherTask != null
         when:
-            taskService.complete(task.id)
+            taskService.complete(teacherTask.id)
         then:
             runtimeService.createProcessInstanceQuery().
                     processInstanceId(processInstance.processInstanceId).
