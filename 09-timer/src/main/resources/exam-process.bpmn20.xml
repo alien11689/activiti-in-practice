@@ -12,7 +12,7 @@
         <sequenceFlow sourceRef="start" targetRef="timer"/>
         <intermediateCatchEvent id="timer">
             <timerEventDefinition>
-                <timeDuration>PT2S</timeDuration>
+                <timeDuration>PT40M</timeDuration>
             </timerEventDefinition>
         </intermediateCatchEvent>
         <sequenceFlow sourceRef="timer" targetRef="studentGivesSolution"/>
@@ -22,7 +22,7 @@
 
         <boundaryEvent attachedToRef="studentGivesSolution" cancelActivity="true" id="studentTimeout">
             <timerEventDefinition>
-                <timeDuration>PT10S</timeDuration>
+                <timeDuration>PT59M</timeDuration>
             </timerEventDefinition>
         </boundaryEvent>
         <sequenceFlow sourceRef="studentTimeout" targetRef="teacherGivesSolution"/>
