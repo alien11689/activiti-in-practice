@@ -12,6 +12,7 @@ import org.springframework.test.context.ContextConfiguration
 import spock.lang.Specification
 import spock.lang.Unroll
 
+@Mixin(AwaitilitySupport)
 @ContextConfiguration(locations = "/context.xml")
 class TimerTest extends Specification {
 
@@ -33,6 +34,7 @@ class TimerTest extends Specification {
             taskService.createTaskQuery().active().list() == []
         when:
             processEngineConfiguration.clock.currentTime = DateTime.now().plusHours(1).toDate()
+            await().until { taskService.createTaskQuery().active().list() != [] }
         then:
             Task task = taskService.createTaskQuery().taskName("studentGivesSolution").singleResult()
         then:
@@ -54,11 +56,13 @@ class TimerTest extends Specification {
             taskService.createTaskQuery().list() == []
         when:
             processEngineConfiguration.clock.currentTime = DateTime.now().plusHours(1).toDate()
+            await().until { taskService.createTaskQuery().active().list() != [] }
         then:
             Task studentTask = taskService.createTaskQuery().taskName("studentGivesSolution").singleResult()
             studentTask != null
         when:
-            processEngineConfiguration.clock.currentTime = DateTime.now().plusHours(1).toDate()
+            processEngineConfiguration.clock.currentTime = DateTime.now().plusHours(2).toDate()
+            await().until { taskService.createTaskQuery().taskName("teacherGivesSolution").list() != [] }
         then:
             Task teacherTask = taskService.createTaskQuery().taskName("teacherGivesSolution").singleResult()
             teacherTask != null
@@ -70,4 +74,7 @@ class TimerTest extends Specification {
                     list() == []
     }
 
+    def cleanup(){
+        processEngineConfiguration.clock.reset()
+    }
 }
