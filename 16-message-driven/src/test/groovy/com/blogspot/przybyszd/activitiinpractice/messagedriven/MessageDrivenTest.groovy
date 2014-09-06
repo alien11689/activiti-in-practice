@@ -34,8 +34,8 @@ class MessageDrivenTest extends Specification {
             runtimeService.messageEventReceived("invalidData", execution.id)
         then:
             HistoricActivityInstance historicActivity = historyService.createHistoricActivityInstanceQuery()
-                    .processInstanceId(processInstance.processInstanceId).activityType("").singleResult()
-            historicActivity.activityName == "failure"
+                    .processInstanceId(processInstance.processInstanceId).activityType("endEvent").singleResult()
+            historicActivity.activityId == "failure"
     }
 
     def "should start process without data and data is valid"() {
@@ -53,8 +53,8 @@ class MessageDrivenTest extends Specification {
             runtimeService.messageEventReceived("validData", execution.id)
         then:
             HistoricActivityInstance historicActivity = historyService.createHistoricActivityInstanceQuery()
-                    .processInstanceId(processInstance.processInstanceId).activityType("").singleResult()
-            historicActivity.activityName == "success"
+                    .processInstanceId(processInstance.processInstanceId).activityType("endEvent").singleResult()
+            historicActivity.activityId == "success"
     }
 
 }
