@@ -28,12 +28,12 @@ class ProcessWithListenersTest extends Specification {
 
     def "should finished simplest process"() {
         when:
-            ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("process-with-listeners")
+            ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("process-with-listeners", "bk")
         then:
-            Task task = taskService.createTaskQuery().
-                    processInstanceId(processInstance.processInstanceId).
-                    taskName("enterGroupData").
-                    singleResult()
+            Task task = taskService.createTaskQuery()
+                    .processInstanceBusinessKey("bk")
+                    .taskName("enterGroupData")
+                    .singleResult()
             task != null
         when:
             taskService.claim(task.id, "test")
