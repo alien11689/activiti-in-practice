@@ -7,9 +7,27 @@
              expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
 
     <process id="process-with-listeners">
+        <extensionElements>
+            <activiti:executionListener event="end" class="com.blogspot.przybyszd.activitiinpractice.listener.ProcessInstanceEndEventHandler"/>
+        </extensionElements>
 
         <startEvent id="start" />
-        <sequenceFlow id="flow1" sourceRef="start" targetRef="end"/>
+        <sequenceFlow sourceRef="start" targetRef="enterGroupData"/>
+        <userTask id="enterGroupData" name="enterGroupData">
+            <extensionElements>
+                <activiti:taskListener expression="${taskEventHandler.handleCreation(execution)}"       event="create"/>
+                <activiti:taskListener expression="${taskEventHandler.handleAssign(execution, task)}"   event="assignment"/>
+                <activiti:taskListener expression="${taskEventHandler.handleCompletion(execution)}"     event="complete"/>
+            </extensionElements>
+        </userTask>
+        <sequenceFlow sourceRef="enterGroupData" targetRef="addGroup"/>
+        <serviceTask id="addGroup" activiti:expression="#{groupAdder.add(groupName)}">
+            <extensionElements>
+                <activiti:executionListener event="start"   expression="${groupAdder.beforeAdd(execution, groupName)}"/>
+                <activiti:executionListener event="end"     expression="${groupAdder.afterAdd(execution)}"/>
+            </extensionElements>
+        </serviceTask>
+        <sequenceFlow sourceRef="addGroup" targetRef="end"/>
         <endEvent id="end" />
 
     </process>
