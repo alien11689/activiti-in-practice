@@ -1,17 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn"
-             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
-             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema"
+             xmlns:activiti="http://activiti.org/bpmn"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
              expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
 
     <process id="person-validation">
 
-        <startEvent id="start" />
-        <sequenceFlow id="flow1" sourceRef="start" targetRef="end"/>
-        <endEvent id="end" />
+        <startEvent id="start"/>
+        <sequenceFlow sourceRef="start" targetRef="personValidation"/>
+        <subProcess id="personValidation">
+            <startEvent id="validationStart"/>
+            <sequenceFlow sourceRef="validationStart" targetRef="validateFirstName"/>
+            <serviceTask id="validateFirstName"
+                         activiti:expression="#{personValidator.validateWithPossibleNull(firstName)}"/>
+            <sequenceFlow sourceRef="validateFirstName" targetRef="validateLastName"/>
+            <serviceTask id="validateLastName" activiti:expression="#{personValidator.validateWithoutNull(lastName)}"/>
+            <sequenceFlow sourceRef="validateLastName" targetRef="validationEnd"/>
+            <endEvent id="validationEnd"/>
+        </subProcess>
+        <sequenceFlow sourceRef="personValidation" targetRef="end"/>
+        <endEvent id="end"/>
 
+        <boundaryEvent attachedToRef="personValidation" id="invalidPersonHandler">
+            <errorEventDefinition id="InvalidPerson"/>
+        </boundaryEvent>
+        <sequenceFlow sourceRef="invalidPersonHandler" targetRef="enterPersonData"/>
+        <userTask id="enterPersonData" name="enterPersonData"/>
+        <sequenceFlow sourceRef="enterPersonData" targetRef="personValidation"/>
     </process>
 
 </definitions>
