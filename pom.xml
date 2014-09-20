@@ -19,6 +19,7 @@
         <module>06-script-task</module>
         <module>07-service-task</module>
         <module>08-email-task</module>
+        <module>09-timer</module>
     </modules>
 
     <properties>
