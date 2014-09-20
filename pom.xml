@@ -24,6 +24,7 @@
         <module>11-async</module>
         <module>12-subprocess</module>
         <module>13-subprocess-started-by-error</module>
+        <module>14-call-activity</module>
     </modules>
 
     <properties>
