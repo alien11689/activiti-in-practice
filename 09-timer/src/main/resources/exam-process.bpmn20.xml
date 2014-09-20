@@ -9,8 +9,25 @@
     <process id="exam-process">
 
         <startEvent id="start" />
-        <sequenceFlow id="flow1" sourceRef="start" targetRef="end"/>
+        <sequenceFlow sourceRef="start" targetRef="timer"/>
+        <intermediateCatchEvent id="timer">
+            <timerEventDefinition>
+                <timeDuration>PT40M</timeDuration>
+            </timerEventDefinition>
+        </intermediateCatchEvent>
+        <sequenceFlow sourceRef="timer" targetRef="studentGivesSolution"/>
+        <userTask id="studentGivesSolution" name="studentGivesSolution"/>
+        <sequenceFlow sourceRef="studentGivesSolution" targetRef="end"/>
         <endEvent id="end" />
+
+        <boundaryEvent attachedToRef="studentGivesSolution" cancelActivity="true" id="studentTimeout">
+            <timerEventDefinition>
+                <timeDuration>PT59M</timeDuration>
+            </timerEventDefinition>
+        </boundaryEvent>
+        <sequenceFlow sourceRef="studentTimeout" targetRef="teacherGivesSolution"/>
+        <userTask id="teacherGivesSolution" name="teacherGivesSolution"/>
+        <sequenceFlow sourceRef="teacherGivesSolution" targetRef="end"/>
 
     </process>
 
