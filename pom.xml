@@ -20,6 +20,7 @@
         <module>07-service-task</module>
         <module>08-email-task</module>
         <module>09-timer</module>
+        <module>10-pvm-boundary-exceptions</module>
     </modules>
 
     <properties>
