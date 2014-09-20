@@ -6,11 +6,37 @@
              xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema"
              expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
 
-    <process id="data-validation-process">
+    <message id="startWithDataMessage" name="availableData"/>
+    <message id="startWithoutDataMessage" name="notAvailableData"/>
+    <message id="validData" name="validData"/>
+    <message id="invalidData" name="invalidData"/>
 
-        <startEvent id="start" />
-        <sequenceFlow id="flow1" sourceRef="start" targetRef="end"/>
-        <endEvent id="end" />
+    <process id="data-validation-process">
+        <startEvent id="startWithData">
+            <messageEventDefinition messageRef="startWithDataMessage"/>
+        </startEvent>
+        <startEvent id="startWithoutData">
+            <messageEventDefinition messageRef="startWithoutDataMessage"/>
+        </startEvent>
+
+        <sequenceFlow sourceRef="startWithoutData" targetRef="addData"/>
+        <userTask id="addData"/>
+        <sequenceFlow sourceRef="addData" targetRef="waitWhenDataAvailable"/>
+
+        <sequenceFlow sourceRef="startWithData" targetRef="waitWhenDataAvailable"/>
+        <receiveTask id="waitWhenDataAvailable"/>
+        <boundaryEvent attachedToRef="waitWhenDataAvailable" id="dataAreValid">
+            <messageEventDefinition messageRef="validData"/>
+        </boundaryEvent>
+        <boundaryEvent attachedToRef="waitWhenDataAvailable" id="dataAreInvalid">
+            <messageEventDefinition messageRef="invalidData"/>
+        </boundaryEvent>
+
+        <sequenceFlow sourceRef="dataAreValid" targetRef="success"/>
+        <sequenceFlow sourceRef="dataAreInvalid" targetRef="failure"/>
+
+        <endEvent id="success" />
+        <endEvent id="failure" />
 
     </process>
 
