@@ -13,6 +13,7 @@
         <module>01-simple</module>
         <module>common-activiti</module>
         <module>02-manual-task</module>
+        <module>03-user-task</module>
     </modules>
 
     <properties>
