@@ -17,6 +17,7 @@
         <module>04-variables-and-conditions</module>
         <module>05-parallel-gateway</module>
         <module>06-script-task</module>
+        <module>07-service-task</module>
     </modules>
 
     <properties>
