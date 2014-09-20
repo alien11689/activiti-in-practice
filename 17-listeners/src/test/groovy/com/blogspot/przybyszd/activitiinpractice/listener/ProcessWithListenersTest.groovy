@@ -1,13 +1,11 @@
 package com.blogspot.przybyszd.activitiinpractice.listener
 
-import org.activiti.engine.EngineServices
 import org.activiti.engine.HistoryService
 import org.activiti.engine.RuntimeService
 import org.activiti.engine.TaskService
-import org.activiti.engine.delegate.event.ActivitiEvent
-import org.activiti.engine.delegate.event.ActivitiEventType
 import org.activiti.engine.history.HistoricProcessInstance
 import org.activiti.engine.history.HistoricVariableInstance
+import org.activiti.engine.runtime.Execution
 import org.activiti.engine.runtime.ProcessInstance
 import org.activiti.engine.task.Task
 import org.springframework.beans.factory.annotation.Autowired
@@ -28,7 +26,7 @@ class ProcessWithListenersTest extends Specification {
 
     def "should finished simplest process"() {
         when:
-            ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("process-with-listeners", "bk")
+            runtimeService.startProcessInstanceByKey("process-with-listeners", "bk")
         then:
             Task task = taskService.createTaskQuery()
                     .processInstanceBusinessKey("bk")
@@ -37,17 +35,23 @@ class ProcessWithListenersTest extends Specification {
             task != null
         when:
             taskService.claim(task.id, "test")
-            taskService.complete(task.id)
+            taskService.complete(task.id, ["groupName": "admin"])
         then:
             HistoricProcessInstance result = historyService.createHistoricProcessInstanceQuery()
-                    .processInstanceId(processInstance.processInstanceId)
+                    .processInstanceBusinessKey("bk")
                     .singleResult()
             result.endTime != null
             HistoricVariableInstance variable = historyService.createHistoricVariableInstanceQuery()
-                .processInstanceId(processInstance.processInstanceId)
+                .processInstanceId(result.id)
                 .variableName("notifications")
                 .singleResult()
-            variable.value == ["task assign to test", "task completed", "group added", "process finished"]
+            variable != null
+            variable.value == ["task created",
+                               "task assigned to test",
+                               "task completed",
+                               "group admin will be added",
+                               "group added",
+                               "process finished"]
     }
 
 }
