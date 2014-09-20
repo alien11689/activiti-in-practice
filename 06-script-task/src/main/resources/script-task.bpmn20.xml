@@ -9,7 +9,15 @@
     <process id="script-task">
 
         <startEvent id="start" />
-        <sequenceFlow id="flow1" sourceRef="start" targetRef="end"/>
+        <sequenceFlow sourceRef="start" targetRef="splitName"/>
+        <scriptTask id="splitName" scriptFormat="groovy">
+            <script>
+                def splitted = username.split()
+                execution.setVariable("firstname", splitted[0])
+                execution.setVariable("lastname", splitted[1])
+            </script>
+        </scriptTask>
+        <sequenceFlow sourceRef="splitName" targetRef="end"/>
         <endEvent id="end" />
 
     </process>
