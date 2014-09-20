@@ -23,6 +23,7 @@
         <module>10-pvm-boundary-exceptions</module>
         <module>11-async</module>
         <module>12-subprocess</module>
+        <module>13-subprocess-started-by-error</module>
     </modules>
 
     <properties>
