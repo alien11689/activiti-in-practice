@@ -18,6 +18,7 @@
         <module>05-parallel-gateway</module>
         <module>06-script-task</module>
         <module>07-service-task</module>
+        <module>08-email-task</module>
     </modules>
 
     <properties>
