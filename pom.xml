@@ -16,6 +16,7 @@
         <module>03-user-task</module>
         <module>04-variables-and-conditions</module>
         <module>05-parallel-gateway</module>
+        <module>06-script-task</module>
     </modules>
 
     <properties>
