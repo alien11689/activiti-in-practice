@@ -25,6 +25,7 @@
         <module>12-subprocess</module>
         <module>13-subprocess-started-by-error</module>
         <module>14-call-activity</module>
+        <module>15-camel-activiti</module>
     </modules>
 
     <properties>
